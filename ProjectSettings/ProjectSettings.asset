@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 28
-  productGUID: 7992bcf4ed2994fb9a6a67d50cd541ce
+  productGUID: f6ea80dd02a8f41779c1acf89376b0bf
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: EPL426_Project
+  productName: HW1_FPS
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -844,14 +844,14 @@ PlayerSettings:
   editorAssembliesCompatibilityLevel: 1
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: EPL426_Project
+  metroPackageName: HW1_FPS
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: EPL426_Project
+  metroApplicationDescription: HW1_FPS
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0
@@ -922,10 +922,10 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 1
   windowsGamepadBackendHint: 0
-  cloudProjectId: 7efff48d-4c94-412b-8462-d156bc6edc1e
+  cloudProjectId: 273032ab-a237-4c2d-9953-6ef77607895d
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: EPL426_Project
+  projectName: HW1_FPS
   organizationId: spanay02
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
