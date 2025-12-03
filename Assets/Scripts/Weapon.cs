@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Weapon : MonoBehaviour
 {
@@ -19,6 +20,10 @@ public class Weapon : MonoBehaviour
 
     public GameObject muzzleEffect;
     private Animator animator;
+    public float reloadTime;
+    
+    public int magazineSize, bulletsLeft;
+    public bool isReloading;
     public enum ShootingMode
     {
         Single,
@@ -33,6 +38,7 @@ public class Weapon : MonoBehaviour
         readyToShoot = true;
         burstBulletsLeft = bulletsPerBurst;
         animator = GetComponent<Animator>();
+        bulletsLeft = magazineSize;
     }
 
 
@@ -45,12 +51,25 @@ public class Weapon : MonoBehaviour
         else if (currentShootingMode == ShootingMode.Single || currentShootingMode == ShootingMode.Burst)
         {
             isShooting = Input.GetKeyDown(KeyCode.Mouse0);
+
+        }
+        if(Input.GetKeyDown(KeyCode.R)&& bulletsLeft< magazineSize && isReloading == false)
+        {
+            Reload();   
+        }
+        if(readyToShoot&& isShooting==false && isReloading==false&& bulletsLeft <= 0)
+        {
+            Reload();
         }
 
         if (readyToShoot && isShooting)
         {
             burstBulletsLeft = bulletsPerBurst;
             FireWeapon();
+        }
+        if (AmmoManager.Instance != null && AmmoManager.Instance.ammoDisplay != null)
+        {
+            AmmoManager.Instance.ammoDisplay.text = $"{bulletsLeft / bulletsPerBurst}/{magazineSize / bulletsPerBurst}";
         }
 
     }
@@ -82,7 +101,7 @@ public class Weapon : MonoBehaviour
     }**/
     private void FireWeapon()
     {
-
+        bulletsLeft --;
         muzzleEffect.GetComponent<ParticleSystem>().Play();
 
         animator.SetTrigger("RECOIL");
@@ -116,7 +135,17 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    private  void Reload()
+    {
+        isReloading = true;
+        Invoke("ReloadCompleted", reloadTime);
+    }
 
+    private void ReloadCompleted()
+    {
+        bulletsLeft = magazineSize;
+            isReloading = false;
+    }
     private void ResetShot()
     {
         readyToShoot = true;
