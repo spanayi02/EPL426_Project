@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    
+
     public bool isShooting, readyToShoot;
     bool allowReset = true;
     public float shootingDelay = 2f;
@@ -17,6 +17,8 @@ public class Weapon : MonoBehaviour
     public float bulletVelocity = 30;
     public float bulletPrefabLifeTime = 3f;
 
+    public GameObject muzzleEffect;
+    private Animator animator;
     public enum ShootingMode
     {
         Single,
@@ -30,7 +32,7 @@ public class Weapon : MonoBehaviour
     {
         readyToShoot = true;
         burstBulletsLeft = bulletsPerBurst;
-
+        animator = GetComponent<Animator>();
     }
 
 
@@ -80,6 +82,12 @@ public class Weapon : MonoBehaviour
     }**/
     private void FireWeapon()
     {
+
+        muzzleEffect.GetComponent<ParticleSystem>().Play();
+
+        animator.SetTrigger("RECOIL");
+
+        SoundManager.Instance.shootingSoundAK47.Play();
         readyToShoot = false;
 
         Vector3 shootingDirection = CalculateDirectionAndSpread().normalized;
@@ -112,7 +120,7 @@ public class Weapon : MonoBehaviour
     private void ResetShot()
     {
         readyToShoot = true;
-        allowReset= true;   
+        allowReset = true;
     }
 
 
@@ -122,19 +130,19 @@ public class Weapon : MonoBehaviour
 
         RaycastHit hit;
         Vector3 targetPoint;
-        if(Physics.Raycast(ray, out hit ))
+        if (Physics.Raycast(ray, out hit))
         {
-            targetPoint=hit.point;
+            targetPoint = hit.point;
 
         }
         else
         {
-            targetPoint=ray.GetPoint(100);
+            targetPoint = ray.GetPoint(100);
         }
 
         Vector3 direction = targetPoint - bulletSpawn.position;
 
-        float x = UnityEngine.Random.Range(- spreadIntencity, spreadIntencity);
+        float x = UnityEngine.Random.Range(-spreadIntencity, spreadIntencity);
         float y = UnityEngine.Random.Range(-spreadIntencity, spreadIntencity);
         return direction + new Vector3(x, y, 0);
 
