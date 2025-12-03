@@ -44,6 +44,10 @@ public class Weapon : MonoBehaviour
 
     void Update()
     {
+        if(bulletsLeft==0&& isShooting)
+        {
+            SoundManager.Instance.emptyMagazineAK47.Play();
+        }
         if (currentShootingMode == ShootingMode.Auto)
         {
             isShooting = Input.GetKey(KeyCode.Mouse0);
@@ -59,21 +63,23 @@ public class Weapon : MonoBehaviour
         }
         if(readyToShoot&& isShooting==false && isReloading==false&& bulletsLeft <= 0)
         {
-            Reload();
+            //Reload();
         }
 
-        if (readyToShoot && isShooting)
+        if (readyToShoot && isShooting&& bulletsLeft>0)
         {
             burstBulletsLeft = bulletsPerBurst;
             FireWeapon();
         }
         if (AmmoManager.Instance != null && AmmoManager.Instance.ammoDisplay != null)
         {
-            AmmoManager.Instance.ammoDisplay.text = $"{bulletsLeft / bulletsPerBurst}/{magazineSize / bulletsPerBurst}";
+            AmmoManager.Instance.ammoDisplay.text = $"{bulletsLeft}/{magazineSize}";
         }
 
-    }
 
+    }
+    /**
+     * $"{bulletsLeft / bulletsPerBurst}/{magazineSize / bulletsPerBurst}";**/
     /**
     private void FireWeapon()
     {
@@ -137,6 +143,8 @@ public class Weapon : MonoBehaviour
 
     private  void Reload()
     {
+        SoundManager.Instance.reloadingSoundAK47.Play();
+
         isReloading = true;
         Invoke("ReloadCompleted", reloadTime);
     }
