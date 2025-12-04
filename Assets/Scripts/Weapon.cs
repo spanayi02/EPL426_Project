@@ -21,9 +21,18 @@ public class Weapon : MonoBehaviour
     public GameObject muzzleEffect;
     private Animator animator;
     public float reloadTime;
-    
+
     public int magazineSize, bulletsLeft;
     public bool isReloading;
+
+    public enum WeaponModel
+    {
+        AK47,
+        Uzi
+    }
+
+    public WeaponModel thisWeaponModel;
+
     public enum ShootingMode
     {
         Single,
@@ -44,7 +53,7 @@ public class Weapon : MonoBehaviour
 
     void Update()
     {
-        if(bulletsLeft==0&& isShooting)
+        if (bulletsLeft == 0 && isShooting)
         {
             SoundManager.Instance.emptyMagazineAK47.Play();
         }
@@ -57,16 +66,16 @@ public class Weapon : MonoBehaviour
             isShooting = Input.GetKeyDown(KeyCode.Mouse0);
 
         }
-        if(Input.GetKeyDown(KeyCode.R)&& bulletsLeft< magazineSize && isReloading == false)
+        if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && isReloading == false)
         {
-            Reload();   
+            Reload();
         }
-        if(readyToShoot&& isShooting==false && isReloading==false&& bulletsLeft <= 0)
+        if (readyToShoot && isShooting == false && isReloading == false && bulletsLeft <= 0)
         {
             //Reload();
         }
 
-        if (readyToShoot && isShooting&& bulletsLeft>0)
+        if (readyToShoot && isShooting && bulletsLeft > 0)
         {
             burstBulletsLeft = bulletsPerBurst;
             FireWeapon();
@@ -107,12 +116,12 @@ public class Weapon : MonoBehaviour
     }**/
     private void FireWeapon()
     {
-        bulletsLeft --;
+        bulletsLeft--;
         muzzleEffect.GetComponent<ParticleSystem>().Play();
 
         animator.SetTrigger("RECOIL");
 
-        SoundManager.Instance.shootingSoundAK47.Play();
+        SoundManager.Instance.PlayShootingSound(thisWeaponModel);
         readyToShoot = false;
 
         Vector3 shootingDirection = CalculateDirectionAndSpread().normalized;
@@ -141,9 +150,11 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    private  void Reload()
+    private void Reload()
     {
-        SoundManager.Instance.reloadingSoundAK47.Play();
+        SoundManager.Instance.PlayReloadSound(thisWeaponModel);
+
+        animator.SetTrigger("RELOAD");
 
         isReloading = true;
         Invoke("ReloadCompleted", reloadTime);
@@ -152,7 +163,7 @@ public class Weapon : MonoBehaviour
     private void ReloadCompleted()
     {
         bulletsLeft = magazineSize;
-            isReloading = false;
+        isReloading = false;
     }
     private void ResetShot()
     {
