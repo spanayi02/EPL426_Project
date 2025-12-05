@@ -75,10 +75,11 @@ public class Weapon : MonoBehaviour
                 isShooting = Input.GetKeyDown(KeyCode.Mouse0);
 
             }
-            if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && isReloading == false)
+            if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && isReloading == false && WeaponManager.Instance.CheckAmmoLeftFor(thisWeaponModel)>0)
             {
                 Reload();
             }
+
             if (readyToShoot && isShooting == false && isReloading == false && bulletsLeft <= 0)
             {
                 //Reload();
@@ -89,40 +90,12 @@ public class Weapon : MonoBehaviour
                 burstBulletsLeft = bulletsPerBurst;
                 FireWeapon();
             }
-            if (AmmoManager.Instance != null && AmmoManager.Instance.ammoDisplay != null)
-            {
-                AmmoManager.Instance.ammoDisplay.text = $"{bulletsLeft}/{magazineSize}";
-            }
+            
 
         }
     }
-    /**
-     * $"{bulletsLeft / bulletsPerBurst}/{magazineSize / bulletsPerBurst}";**/
-    /**
-    private void FireWeapon()
-    {
-        bullet.transform.forward = shootingDirection;
-        readyToShoot = false;
-        Vector3 shootingDirection=CalculateDirectionAndSpread().normalized;
-        //initiate
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
-
-        //shoot
-        bullet.GetComponent<Rigidbody>().AddForce(shootingDirection * bulletVelocity, ForceMode.Impulse);
-        //destroy after time
-        StartCoroutine(DestroyBulletAfterTime(bullet, bulletPrefabLifeTime));
-
-        if (allowReset)
-        {
-            Invoke("ResetShot", shootingDelay);
-            allowReset = false;
-        }
-
-        if (currentShootingMode == ShootingMode.Burst && burstBulletsLeft > 1) {
-            burstBulletsLeft--;
-            Invoke("FireWeapon",shootingDelay);
-        }
-    }**/
+    
+    
     private void FireWeapon()
     {
         bulletsLeft--;
@@ -171,9 +144,20 @@ public class Weapon : MonoBehaviour
 
     private void ReloadCompleted()
     {
-        bulletsLeft = magazineSize;
+        if (WeaponManager.Instance.CheckAmmoLeftFor(thisWeaponModel) > magazineSize)
+        {
+            bulletsLeft = magazineSize;
+            WeaponManager.Instance.DecreaseTotalAmmo(bulletsLeft, thisWeaponModel);
+        }
+        else
+        {
+            bulletsLeft = WeaponManager.Instance.CheckAmmoLeftFor(thisWeaponModel);
+            WeaponManager.Instance.DecreaseTotalAmmo(bulletsLeft, thisWeaponModel);
+        }
+
         isReloading = false;
     }
+
     private void ResetShot()
     {
         readyToShoot = true;
