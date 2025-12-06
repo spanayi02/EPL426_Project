@@ -7,6 +7,8 @@ using TMPro;
 public class Weapon : MonoBehaviour
 {
 
+    public int weaponDamage;
+
     public bool isActiveWeapon;
 
     public bool isShooting, readyToShoot;
@@ -60,6 +62,12 @@ public class Weapon : MonoBehaviour
 
         if (isActiveWeapon)
         {
+            gameObject.layer = LayerMask.NameToLayer("WeaponRender");
+            foreach (Transform child in transform)
+            {
+                child.gameObject.layer = LayerMask.NameToLayer("WeaponRender");
+            }
+
             GetComponent<Outline>().enabled = false;
 
             if (bulletsLeft == 0 && isShooting)
@@ -75,7 +83,7 @@ public class Weapon : MonoBehaviour
                 isShooting = Input.GetKeyDown(KeyCode.Mouse0);
 
             }
-            if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && isReloading == false && WeaponManager.Instance.CheckAmmoLeftFor(thisWeaponModel)>0)
+            if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && isReloading == false && WeaponManager.Instance.CheckAmmoLeftFor(thisWeaponModel) > 0)
             {
                 Reload();
             }
@@ -90,12 +98,19 @@ public class Weapon : MonoBehaviour
                 burstBulletsLeft = bulletsPerBurst;
                 FireWeapon();
             }
-            
+
 
         }
+        else
+        {
+            foreach (Transform child in transform)
+            {
+                child.gameObject.layer = LayerMask.NameToLayer("Default");
+            }
+        }
     }
-    
-    
+
+
     private void FireWeapon()
     {
         bulletsLeft--;
@@ -109,6 +124,8 @@ public class Weapon : MonoBehaviour
         Vector3 shootingDirection = CalculateDirectionAndSpread().normalized;
 
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
+        Bullet bul = bullet.GetComponent<Bullet>();
+        bul.bulletDamage = weaponDamage;
         bullet.transform.forward = shootingDirection;
 
         Rigidbody rb = bullet.GetComponent<Rigidbody>();

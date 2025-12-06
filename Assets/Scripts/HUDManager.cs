@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class HUDManager : MonoBehaviour
 {
     public static HUDManager Instance { get; set; }
+
     [Header("Ammo")]
     public TextMeshProUGUI magazineAmmoUI;
     public TextMeshProUGUI totalAmmoUI;
@@ -16,9 +17,6 @@ public class HUDManager : MonoBehaviour
     public Image activeWeaponUI;
     public Image unActiveWeaponUI;
 
- 
-
-    
     public Sprite emptySlot;
 
     private void Awake()
@@ -31,8 +29,8 @@ public class HUDManager : MonoBehaviour
         {
             Instance = this;
         }
-
     }
+
     private void Update()
     {
         Weapon activeWeapon = WeaponManager.Instance.activeWeaponSlot.GetComponentInChildren<Weapon>();
@@ -45,7 +43,6 @@ public class HUDManager : MonoBehaviour
 
             Weapon.WeaponModel model = activeWeapon.thisWeaponModel;
             ammoTypeUI.sprite = GetAmmoSprite(model);
-
             activeWeaponUI.sprite = GetWeaponSprite(model);
 
             if (unActiveWeapon)
@@ -58,19 +55,26 @@ public class HUDManager : MonoBehaviour
             magazineAmmoUI.text = "";
             totalAmmoUI.text = "";
             ammoTypeUI.sprite = emptySlot;
-            activeWeaponUI.sprite= emptySlot;
+            activeWeaponUI.sprite = emptySlot;
             unActiveWeaponUI.sprite = emptySlot;
         }
     }
+
     private Sprite GetWeaponSprite(Weapon.WeaponModel model)
     {
         switch (model)
         {
             case Weapon.WeaponModel.AK47:
-                return Instantiate(Resources.Load<GameObject>("AK47_Weapon")).GetComponent<SpriteRenderer>().sprite;
+                {
+                    GameObject prefab = Resources.Load<GameObject>("AK47_Weapon");
+                    return prefab.GetComponent<SpriteRenderer>().sprite;
+                }
 
             case Weapon.WeaponModel.Uzi:
-                return Instantiate(Resources.Load<GameObject>("Uzi_Weapon")).GetComponent<SpriteRenderer>().sprite;
+                {
+                    GameObject prefab = Resources.Load<GameObject>("Uzi_Weapon");
+                    return prefab.GetComponent<SpriteRenderer>().sprite;
+                }
 
             default:
                 return null;
@@ -82,15 +86,22 @@ public class HUDManager : MonoBehaviour
         switch (model)
         {
             case Weapon.WeaponModel.AK47:
-                return Instantiate(Resources.Load<GameObject>("AK47_Bullets")).GetComponent<SpriteRenderer>().sprite;
+                {
+                    GameObject prefab = Resources.Load<GameObject>("AK47_Bullets");
+                    return prefab.GetComponent<SpriteRenderer>().sprite;
+                }
 
             case Weapon.WeaponModel.Uzi:
-                return Instantiate(Resources.Load<GameObject>("Uzi_Bullets")).GetComponent<SpriteRenderer>().sprite;
+                {
+                    GameObject prefab = Resources.Load<GameObject>("Uzi_Bullets");
+                    return prefab.GetComponent<SpriteRenderer>().sprite;
+                }
 
             default:
                 return null;
         }
     }
+
     private GameObject GetUnActiveWeaponSlot()
     {
         foreach (GameObject weaponSlot in WeaponManager.Instance.weaponSlots)
@@ -105,4 +116,3 @@ public class HUDManager : MonoBehaviour
         return null;
     }
 }
-
