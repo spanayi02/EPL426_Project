@@ -18,6 +18,11 @@ public class ZombieChaseState : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+
+        if (SoundManager.Instance.zombieChannel.isPlaying == false)
+        {
+            SoundManager.Instance.zombieChannel.PlayOneShot(SoundManager.Instance.ZombieChase);
+        }
         agent.SetDestination(player.position);
         animator.transform.LookAt(player);
 
@@ -42,7 +47,8 @@ public class ZombieChaseState : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-      agent.SetDestination(animator.transform.position);
+        agent.SetDestination(animator.transform.position);
+        SoundManager.Instance.zombieChannel.Stop();
     }
 
 

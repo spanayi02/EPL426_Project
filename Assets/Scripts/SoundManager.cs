@@ -11,6 +11,20 @@ public class SoundManager : MonoBehaviour
     public AudioSource emptyMagazineAK47;
     public AudioClip UziShot;
     public AudioClip AK47Shot;
+    public AudioClip ZombieWalking;
+    public AudioClip ZombieChase;
+    public AudioClip ZombieHurt;
+    public AudioClip ZombieAttack;
+    public AudioClip ZombieDeath;
+
+    public AudioSource zombieChannel;
+    public AudioSource zombieChannel2;
+    public AudioSource playerChannel;
+    public AudioClip playerHurt;
+    public AudioClip playerDie;
+
+
+
 
     private void Awake()
     {

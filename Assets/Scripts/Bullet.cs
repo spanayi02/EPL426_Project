@@ -27,8 +27,15 @@ public class Bullet : MonoBehaviour
         if (objectWeHit.gameObject.CompareTag("Zombie"))
         {
             print("hit a zombie");
+            if (objectWeHit.gameObject.GetComponent<Zombie>().isDead == false)
+            {
+                objectWeHit.gameObject.GetComponent<Zombie>().TakeDamage(bulletDamage);
 
-            objectWeHit.gameObject.GetComponent<Zombie>().TakeDamage(bulletDamage);
+            }
+
+
+            CreateBloodSprayEffect(objectWeHit);
+
             Destroy(gameObject);
 
         }
@@ -49,6 +56,22 @@ public class Bullet : MonoBehaviour
         );
 
         hole.transform.SetParent(objectWeHit.gameObject.transform);
+
+    }
+    void CreateBloodSprayEffect(Collision objectWeHit)
+    {
+
+        ContactPoint contact = objectWeHit.contacts[0];
+
+        GameObject bloodSprayPrefab = Instantiate(
+            GlobalReferences.Instance.bloodSprayEffect,
+            contact.point,
+            Quaternion.LookRotation(contact.normal)
+
+
+        );
+
+        bloodSprayPrefab.transform.SetParent(objectWeHit.gameObject.transform);
 
     }
 

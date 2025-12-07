@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Zombie : MonoBehaviour
 {
@@ -9,6 +11,8 @@ public class Zombie : MonoBehaviour
     private Animator animator;
 
     private UnityEngine.AI.NavMeshAgent navAgent;
+
+    public bool isDead;
 
     private void Start()
     {
@@ -32,10 +36,17 @@ public class Zombie : MonoBehaviour
             {
                 animator.SetTrigger("Die2");
             }
+
+            isDead = true;
+            //sound dead
+            SoundManager.Instance.zombieChannel2.PlayOneShot(SoundManager.Instance.ZombieDeath);
         }
         else
         {
             animator.SetTrigger("Damage");
+            SoundManager.Instance.zombieChannel2.PlayOneShot(SoundManager.Instance.ZombieHurt);
+
+
         }
     }
 
