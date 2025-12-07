@@ -5,7 +5,7 @@ public class Player : MonoBehaviour
     [SerializeField] private int HP = 200;
     public void TakeDamage(int damageAmount)
     {
-        
+        HP -= damageAmount;
 
         if (HP <= 0)
         {
@@ -15,9 +15,9 @@ public class Player : MonoBehaviour
         {
             print("player hit");
         }
-        }
-    
-        private void OnTriggerEnter(Collider other)
+    }
+
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("ZombieHand"))
         {
