@@ -11,8 +11,12 @@ public class MainMenu : MonoBehaviour
 
     string newGameScene = "fps";
 
+    public AudioClip bg_music;
+    public AudioSource main_channel;
+
     void Start()
     {
+        main_channel.PlayOneShot(bg_music);
         // Set the high score text
         int highScore = SaveLoadManager.Instance.LoadHighScore();
         highScoreUI.text = $"Top Wave Survived: {highScore}";
@@ -20,6 +24,7 @@ public class MainMenu : MonoBehaviour
 
     public void StartNewGame()
     {
+        main_channel.Stop();
         SceneManager.LoadScene(newGameScene);
     }
     public void ExitApplication()
