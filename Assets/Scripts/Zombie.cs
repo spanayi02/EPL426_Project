@@ -1,53 +1,72 @@
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class Zombie : MonoBehaviour
 {
-
     [SerializeField] private int HP = 100;
+    [SerializeField] private ParticleSystem bloodEffect;
+
     private Animator animator;
+    private NavMeshAgent navAgent;
 
-    private UnityEngine.AI.NavMeshAgent navAgent;
-
-    public bool isDead;
+    public bool isDead = false;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
-        navAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        navAgent = GetComponent<NavMeshAgent>();
     }
 
     public void TakeDamage(int damageAmount)
     {
+        if (isDead) return;
+
         HP -= damageAmount;
+
+        // Play blood effect
+        if (bloodEffect != null)
+        {
+            bloodEffect.Play();
+            StartCoroutine(StopBloodAfterTime(0.1f));
+        }
 
         if (HP <= 0)
         {
-            int randomValue = Random.Range(0, 2);
-            if (randomValue == 0)
-            {
-                animator.SetTrigger("Die1");
-
-            }
-            else
-            {
-                animator.SetTrigger("Die2");
-            }
-
-            isDead = true;
-            //sound dead
-            SoundManager.Instance.zombieChannel2.PlayOneShot(SoundManager.Instance.ZombieDeath);
+            Die();
         }
         else
         {
             animator.SetTrigger("Damage");
-            SoundManager.Instance.zombieChannel2.PlayOneShot(SoundManager.Instance.ZombieHurt);
-
-
+            SoundManager.Instance.zombieChannel2
+                .PlayOneShot(SoundManager.Instance.ZombieHurt);
         }
+    }
+
+    private IEnumerator StopBloodAfterTime(float time)
+    {
+        yield return new WaitForSeconds(time);
+        if (bloodEffect != null)
+            bloodEffect.Stop();
+    }
+
+    private void Die()
+    {
+        isDead = true;
+
+        if (navAgent != null)
+        {
+            navAgent.isStopped = true;
+            navAgent.enabled = false;
+        }
+
+        int randomValue = Random.Range(0, 2);
+        animator.SetTrigger(randomValue == 0 ? "Die1" : "Die2");
+
+        SoundManager.Instance.zombieChannel2
+            .PlayOneShot(SoundManager.Instance.ZombieDeath);
+
+        Destroy(gameObject, 3f);
     }
 
     private void OnDrawGizmos()
@@ -55,9 +74,8 @@ public class Zombie : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, 2.5f);
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, 18f);
+        Gizmos.DrawWireSphere(transform.position, 50f);
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, 21f);
-
+        Gizmos.DrawWireSphere(transform.position, 51f);
     }
 }
