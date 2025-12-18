@@ -16,6 +16,8 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         main_channel.PlayOneShot(bg_music);
         // Set the high score text
         int highScore = SaveLoadManager.Instance.LoadHighScore();
@@ -24,6 +26,7 @@ public class MainMenu : MonoBehaviour
 
     public void StartNewGame()
     {
+        Time.timeScale = 1f;
         main_channel.Stop();
         SceneManager.LoadScene(newGameScene);
     }

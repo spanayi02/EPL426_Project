@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 public class Player : MonoBehaviour
 {
-    [SerializeField] private int HP = 200;
+    [SerializeField] private int HP = 300;
     public GameObject bloodyScreen;
     public TextMeshProUGUI playerHealthUI;
     public GameObject gameOverUI;
@@ -65,7 +65,7 @@ public class Player : MonoBehaviour
         }
         StartCoroutine(ReturnToMainMenu());
 
-        
+
     }
 
     private IEnumerator ReturnToMainMenu()

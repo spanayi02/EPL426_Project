@@ -28,7 +28,7 @@ public class Zombie : MonoBehaviour
         if (bloodEffect != null)
         {
             bloodEffect.Play();
-            StartCoroutine(StopBloodAfterTime(0.1f));
+            StartCoroutine(StopBloodAfterTime(0.05f));
         }
 
         if (HP <= 0)
@@ -74,8 +74,8 @@ public class Zombie : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, 2.5f);
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, 50f);
+        Gizmos.DrawWireSphere(transform.position, 30f);
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, 51f);
+        Gizmos.DrawWireSphere(transform.position, 31f);
     }
 }

@@ -3918,7 +3918,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   speed: 12
-  gravity: -19.62
+  gravity: -9.81
   jumpHeight: 3
   groundCheck: {fileID: 1027653510}
   groundDistance: 0.4
@@ -3958,7 +3958,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6292f647b90cee74fafe14cc98b517d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  HP: 200
+  HP: 300
   bloodyScreen: {fileID: 308504080}
   playerHealthUI: {fileID: 713296204}
   gameOverUI: {fileID: 745120671}
@@ -5288,6 +5288,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GlobalReferences
   bulletImpactEffectPrefab: {fileID: 1702963863754021305, guid: 03e768e1cc8bc470488ea3bd88374ffe, type: 3}
   bloodSprayEffect: {fileID: 2646254316585448218, guid: d5badef7e512a418fb52f541fc724097, type: 3}
+  waveNumber: 0
 --- !u!4 &1591635957
 Transform:
   m_ObjectHideFlags: 0

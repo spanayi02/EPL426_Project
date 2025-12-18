@@ -25,93 +25,94 @@ public class ZombieSpawnController : MonoBehaviour
     public TextMeshProUGUI currentWaveUI;
 
     private void Start()
-{
-    currentZombiesPerWave = initialZombiesPerWave;
+    {
+        currentZombiesPerWave = initialZombiesPerWave;
         GlobalReferences.Instance.waveNumber = 0;
         StartNextWave();
-}
+    }
 
-private void StartNextWave()
-{
-    currentZombiesAlive.Clear();
+    private void StartNextWave()
+    {
+        currentZombiesAlive.Clear();
 
-    currentWave++;
+        currentWave++;
         GlobalReferences.Instance.waveNumber = currentWave;
         currentWaveUI.text = "Wave" + currentWave.ToString();
 
-    StartCoroutine(SpawnWave());
-}
-
-private IEnumerator SpawnWave()
-{
-    for (int i=0;i<currentZombiesPerWave;i++)
-    {
-        Vector3 spawnOffset = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f));
-        Vector3 spawnPosition =transform.position + spawnOffset;
-
-        var zombie = Instantiate(zombiePrefab, spawnPosition, Quaternion.identity);
-
-        Zombie enemyScript = zombie.GetComponent<Zombie>();
-
-        //track zombie
-        currentZombiesAlive.Add(enemyScript);
-
-        yield return new WaitForSeconds(spawnDelay);
-
+        StartCoroutine(SpawnWave());
     }
-}
 
-    private void Update() { 
-
-// Get all dead zombies
-List<Zombie> zombiesToRemove = new List<Zombie>();
-foreach (Zombie zombie in currentZombiesAlive)
-{
-    if (zombie.isDead)
+    private IEnumerator SpawnWave()
     {
-        zombiesToRemove.Add(zombie);
+        for (int i = 0; i < currentZombiesPerWave; i++)
+        {
+            Vector3 spawnOffset = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f));
+            Vector3 spawnPosition = transform.position + spawnOffset;
+
+            var zombie = Instantiate(zombiePrefab, spawnPosition, Quaternion.identity);
+
+            Zombie enemyScript = zombie.GetComponent<Zombie>();
+
+            //track zombie
+            currentZombiesAlive.Add(enemyScript);
+
+            yield return new WaitForSeconds(spawnDelay);
+
+        }
     }
-}
 
-// Actually remove all dead zombies
-foreach (Zombie zombie in zombiesToRemove)
-{
-    currentZombiesAlive.Remove(zombie);
-}
+    private void Update()
+    {
 
-zombiesToRemove.Clear();
+        // Get all dead zombies
+        List<Zombie> zombiesToRemove = new List<Zombie>();
+        foreach (Zombie zombie in currentZombiesAlive)
+        {
+            if (zombie.isDead)
+            {
+                zombiesToRemove.Add(zombie);
+            }
+        }
 
-// Start Cooldown if all zombies are dead
-if (currentZombiesAlive.Count == 0 && inCooldown == false)
-{
-    // Start cooldown for next wave
-    StartCoroutine(WaveCooldown());
-}
+        // Actually remove all dead zombies
+        foreach (Zombie zombie in zombiesToRemove)
+        {
+            currentZombiesAlive.Remove(zombie);
+        }
 
-// Run the cooldown counter
-if (inCooldown)
-{
-    cooldownCounter -= Time.deltaTime;
-}
-else
-{
-    // Reset the counter
-    cooldownCounter = waveCooldown;
-}
-cooldownCounterUI.text=cooldownCounter.ToString("F0");
-}
+        zombiesToRemove.Clear();
 
-private IEnumerator WaveCooldown()
-{
-    inCooldown = true;
+        // Start Cooldown if all zombies are dead
+        if (currentZombiesAlive.Count == 0 && inCooldown == false)
+        {
+            // Start cooldown for next wave
+            StartCoroutine(WaveCooldown());
+        }
+
+        // Run the cooldown counter
+        if (inCooldown)
+        {
+            cooldownCounter -= Time.deltaTime;
+        }
+        else
+        {
+            // Reset the counter
+            cooldownCounter = waveCooldown;
+        }
+        cooldownCounterUI.text = cooldownCounter.ToString("F0");
+    }
+
+    private IEnumerator WaveCooldown()
+    {
+        inCooldown = true;
         waveOverUI.gameObject.SetActive(true);
 
-    yield return new WaitForSeconds(waveCooldown);
-    inCooldown = false;
+        yield return new WaitForSeconds(waveCooldown);
+        inCooldown = false;
         waveOverUI.gameObject.SetActive(false);
-    currentZombiesPerWave += 5;
-    StartNextWave();
-}
+        currentZombiesPerWave += 5;
+        StartNextWave();
+    }
 
 }
 
